@@ -68,8 +68,18 @@ def determine_grade(cell):
 
     elif cell.cell_type == 'code':
         for output in cell.outputs:
-            if output.output_type == 'error':
-                return 0, max_points
+            if output.output_type == 'error':    
+                errorFlag = True
+            # Error messages written to stderr are also a sign of a failed test
+            elif output.output_type == 'stream' and output.name == 'stderr':
+                errorFlag = True
+            if errorFlag:
+               # There may also be tests with zero max points (e.g. to check for correct syntax)
+               # To mark them as failed we need to return -1
+               if max_points == 0:
+                   return -1, 0
+               else:
+                   return 0, max_points
         return max_points, max_points
 
     else:
