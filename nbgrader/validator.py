@@ -252,7 +252,8 @@ class Validator(LoggingConfigurable):
                 results['failed'] = [{
                     "source": cell.source.strip(),
                     "error": ansi2html(self._extract_error(cell)),
-                    "raw_error": self._extract_error(cell)
+                    "raw_error": self._extract_error(cell),
+                    "hide_input": cell.metadata.get("hide_input", False)
                 } for cell in failed]
 
         return results
