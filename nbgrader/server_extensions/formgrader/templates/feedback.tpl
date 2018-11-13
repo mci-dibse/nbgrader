@@ -121,11 +121,11 @@ span.nbgrader-label {
           {% for cell in nb.cells %}
             {% if not cell.metadata.hide_input %}  <!-- Exclude any cells that have the hide_input flag set (from the hide_input extension) -->
                 {% if cell.metadata.nbgrader and cell.metadata.nbgrader.grade and not cell.metadata.nbgrader.solution %}
-                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Test cell</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
+                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Test cell</a></li>
                 {% elif cell.cell_type == "code" and cell.metadata.nbgrader and cell.metadata.nbgrader.grade %}
-                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Coding free-response</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
+                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Coding free-response</a></li>
                 {% elif cell.cell_type == "markdown" and cell.metadata.nbgrader and cell.metadata.nbgrader.grade %}
-                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Written response</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
+                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Written response</a></li>
                 {% endif %}
                 {% if cell.metadata.nbgrader and cell.metadata.nbgrader.comment and cell.metadata.nbgrader.comment %}
                 <li><a href="#comment-{{ cell.metadata.nbgrader.grade_id }}">Comment</a></li>
@@ -156,7 +156,7 @@ span.nbgrader-label {
 
 {% macro score(cell) -%}
   <span class="pull-right">
-      Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }} <a href="#top">(Top)</a>
+      <a href="#top">(Top)</a>
   </span>
 {%- endmacro %}
 

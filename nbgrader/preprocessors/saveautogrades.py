@@ -42,7 +42,7 @@ class SaveAutoGrades(NbGraderPreprocessor):
         auto_score, _ = utils.determine_grade(cell)
         # To be able to have autograding tests with zero max points we return -1 in case such a test fails
         # Therefore we need to correct any negative points here
-        if auto_score < 0:
+        if isinstance(auto_score, int) and auto_score < 0:
             auto_score = 0
         grade.auto_score = auto_score
 
