@@ -57,7 +57,7 @@ class Exchange(LoggingConfigurable):
         return os.path.join(jupyter_data_dir(), 'nbgrader_cache')
 
     path_includes_course = Bool(
-        False,
+        True,
         help=dedent(
             """
             Whether the path for fetching/submitting  assignments should be

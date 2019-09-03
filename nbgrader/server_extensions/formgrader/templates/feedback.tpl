@@ -119,17 +119,17 @@ span.nbgrader-label {
         <div id="toc">
           <ol>
           {% for cell in nb.cells %}
-            {% if cell.metadata.nbgrader and cell.metadata.nbgrader.grade and not cell.metadata.nbgrader.solution %}
-            <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Test cell</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
-            {% elif cell.cell_type == "code" and cell.metadata.nbgrader and cell.metadata.nbgrader.grade %}
-            <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Coding free-response</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
-            {% elif cell.cell_type == "markdown" and cell.metadata.nbgrader and cell.metadata.nbgrader.grade %}
-            <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Written response</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
-            {% elif cell.cell_type == "markdown" and cell.metadata.nbgrader and cell.metadata.nbgrader.task %}
-            <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Task</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
-            {% endif %}
-            {% if cell.metadata.nbgrader and cell.metadata.nbgrader.comment and cell.metadata.nbgrader.comment %}
-            <li><a href="#comment-{{ cell.metadata.nbgrader.grade_id }}">Comment</a></li>
+             {% if not cell.metadata.hide_input %}  <!-- Exclude any cells that have the hide_input flag set (from the hide_input extension) -->
+                {% if cell.metadata.nbgrader and cell.metadata.nbgrader.grade and not cell.metadata.nbgrader.solution %}
+                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Test cell</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
+                {% elif cell.cell_type == "code" and cell.metadata.nbgrader and cell.metadata.nbgrader.grade %}
+                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Coding free-response</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
+                {% elif cell.cell_type == "markdown" and cell.metadata.nbgrader and cell.metadata.nbgrader.grade %}
+                <li><a href="#{{ cell.metadata.nbgrader.grade_id }}">Written response</a> (Score: {{ cell.metadata.nbgrader.score | float | round(2) }} / {{ cell.metadata.nbgrader.points | float | round(2) }})</li>
+                {% endif %}
+                {% if cell.metadata.nbgrader and cell.metadata.nbgrader.comment and cell.metadata.nbgrader.comment %}
+                <li><a href="#comment-{{ cell.metadata.nbgrader.grade_id }}">Comment</a></li>
+                {% endif %}
             {% endif %}
           {% endfor %}
           {% if resources.nbgrader.late_penalty > 0 %}
@@ -228,24 +228,25 @@ span.nbgrader-label {
 {% endblock markdowncell %}
 
 {% block input %}
-  {%- if 'nbgrader' in cell.metadata and (cell.metadata.nbgrader.solution or cell.metadata.nbgrader.grade) -%}
-  <div class="panel panel-primary nbgrader_cell">
-    {{ nbgrader_heading(cell) }}
-    <div class="panel-body">
-      <div class="input_area">
+  {%- if not cell.metadata.hide_input -%} <!-- Exclude any cells that have the hide_input flag set (from the hide_input ex) -->
+    {%- if 'nbgrader' in cell.metadata and (cell.metadata.nbgrader.solution or cell.metadata.nbgrader.grade) -%}
+    <div class="panel panel-primary nbgrader_cell">
+        {{ nbgrader_heading(cell) }}
+        <div class="panel-body">
+        <div class="input_area">
+            {{ cell.source | highlight_code(metadata=cell.metadata) }}
+        </div>
+        </div>
+        {{ nbgrader_footer(cell) }}
+    </div>
+
+    {%- else -%}
+
+    <div class="inner_cell">
+        <div class="input_area">
         {{ cell.source | highlight_code(metadata=cell.metadata) }}
-      </div>
+        </div>
     </div>
-    {{ nbgrader_footer(cell) }}
-  </div>
-
-  {%- else -%}
-
-  <div class="inner_cell">
-    <div class="input_area">
-      {{ cell.source | highlight_code(metadata=cell.metadata) }}
-    </div>
-  </div>
+    {%- endif -%}
   {%- endif -%}
-
 {% endblock input %}

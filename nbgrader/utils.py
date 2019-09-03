@@ -111,8 +111,18 @@ def determine_grade(cell, log=None):
         # 3. output is something else, or nothing (full credit).
         for output in cell.outputs:
             # option 1: error, return 0
-            if output.output_type == 'error':
-                return 0, max_points
+            if output.output_type == 'error':    
+                errorFlag = True
+            # Error messages written to stderr are also a sign of a failed test
+            elif output.output_type == 'stream' and output.name == 'stderr':
+                errorFlag = True
+            if errorFlag:
+               # There may also be tests with zero max points (e.g. to check for correct syntax)
+               # To mark them as failed we need to return -1
+               if max_points == 0:
+                   return -1, 0
+               else:
+                   return 0, max_points
             # if not error, then check for option 2, partial credit
             if output.output_type == 'execute_result':
                 # is there a single result that can be cast to a float?
@@ -218,6 +228,10 @@ def check_directory(path, read=False, write=False, execute=False):
 
 def get_osusername():
     """Get the username of the current process."""
+    try:
+        return os.environ['JUPYTERHUB_USER']
+    except:
+        pass
     if pwd is None:
         raise OSError("get_username cannot be called on Windows")
     return pwd.getpwuid(os.getuid())[0]
@@ -535,14 +549,7 @@ def capture_log(app, fmt="[%(levelname)s] %(message)s"):
     return result
 
 
-def notebook_hash(path, unique_key=None):
+def notebook_hash(path):
     m = hashlib.md5()
     m.update(open(path, 'rb').read())
-    if unique_key:
-        m.update(to_bytes(unique_key))
     return m.hexdigest()
-
-
-def make_unique_key(course_id, assignment_id, notebook_id, student_id, timestamp):
-    return "+".join([
-        course_id, assignment_id, notebook_id, student_id, timestamp])

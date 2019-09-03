@@ -107,11 +107,11 @@ define([
                 body.addClass("validation-passed");
 
             } else if (data.failed !== undefined) {
-                for (var i=0; i<data.failed.length; i++) {
-                    body.append($('<div/>').append($('<p/>').text('The following cell failed:')));
-                    body.append($('<pre/>').text(data.failed[i].source));
-                    body.append($('<pre/>').html(data.failed[i].error));
-                }
+                    if (!data.failed[i].hide_input) {
+                        body.append($('<div/>').append($('<p/>').text('The following cell failed:')));
+                        body.append($('<pre/>').text(data.failed[i].source));
+                    }
+                    body.append($('<pre class="failed_message"/>').html(data.failed[i].error));
                 body.addClass("validation-failed");
 
             } else {

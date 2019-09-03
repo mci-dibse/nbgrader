@@ -115,6 +115,10 @@ class Validator(LoggingConfigurable):
             for output in cell.outputs:
                 if output.output_type == "error":
                     errors.append("\n".join(output.traceback))
+                elif output.output_type == "stream" and output.name == 'stderr':
+                    # For some reason using "\n".join(output.text) here leads to each letter being in a new line
+                    # Therefore we already add the "\n" to the error message itself.
+                    errors.append("".join(output.text))
 
             if len(errors) == 0:
                 if utils.is_grade(cell):
@@ -331,7 +335,8 @@ class Validator(LoggingConfigurable):
                 results['failed'] = [{
                     "source": cell.source.strip(),
                     "error": ansi2html(self._extract_error(cell)),
-                    "raw_error": self._extract_error(cell)
+                    "raw_error": self._extract_error(cell),
+                    "hide_input": cell.metadata.get("hide_input", False)
                 } for cell in failed]
 
         return results
