@@ -13,7 +13,7 @@ define([
     // xsrf token in the header data
 
     var course_html = $([
-        '<div id="courses" class="tab-pane">',
+        '<div id="courses" class="courses-tab-link">',
         '  <div class="alert alert-danger version_error">',
         '  </div>',
         '  <div class="panel-group">',
