@@ -23,7 +23,7 @@ class ExchangeError(Exception):
 class Exchange(LoggingConfigurable):
 
     assignment_dir = Unicode(
-        ".",
+        "./work/",
         help=dedent(
             """
             Local path for storing student assignments.  Defaults to '.'
