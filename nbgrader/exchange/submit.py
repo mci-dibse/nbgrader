@@ -189,9 +189,8 @@ class ExchangeSubmit(Exchange):
         logger.info("Submitted as: %s %s %s", self.coursedir.course_id, self.coursedir.assignment_id, str(self.timestamp))
 
     def create_sakai_submission(self, dest_path):
-        base_url='https://sakai-dev.mci.edu'
+        base_url='https://sakai.mci4me.at'
         login_url = base_url + "/sakai-ws/soap/login?wsdl"
-        script_url = base_url + "/sakai-ws/soap/sakai?wsdl"
         soap_url='/sakai-ws/soap'
         assignment_url = base_url + soap_url + "/assignments?wsdl"
         logger = self.getLogger()
