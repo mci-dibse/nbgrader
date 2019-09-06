@@ -116,6 +116,8 @@ def determine_grade(cell, log=None):
             # Error messages written to stderr are also a sign of a failed test
             elif output.output_type == 'stream' and output.name == 'stderr':
                 errorFlag = True
+            elif output.output_type == 'stream' and output.name == 'stdout' and output.text[:6] == 'Error:':
+                errorFlag = True
             if errorFlag:
                # There may also be tests with zero max points (e.g. to check for correct syntax)
                # To mark them as failed we need to return -1
