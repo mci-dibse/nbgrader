@@ -111,7 +111,8 @@ def determine_grade(cell, log=None):
         # 3. output is something else, or nothing (full credit).
         for output in cell.outputs:
             # option 1: error, return 0
-            if output.output_type == 'error':    
+            errorFlag = False
+            if output.output_type == 'error':
                 errorFlag = True
             # Error messages written to stderr are also a sign of a failed test
             elif output.output_type == 'stream' and output.name == 'stderr':
