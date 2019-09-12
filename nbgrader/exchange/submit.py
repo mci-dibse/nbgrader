@@ -205,8 +205,8 @@ class ExchangeSubmit(Exchange):
             return -1
 
         try:
-            f1 = open("~/.jupyter/cvtajjqtoT", "r")
-            f2 = open("~/.jupyter/ffvdWEFKIO", "r")
+            f1 = open("/home/jovyan/.jupyter/custom/cvtajjqtoT", "r")
+            f2 = open("/home/jovyan/.jupyter/custom/ffvdWEFKIO", "r")
             k = Fernet(f1.readline().encode("utf-8"))
             session_id = login_proxy.service.login('dd1337', k.decrypt(f2.readline().encode("utf-8")).decode("utf-8"))
             service_proxy = Client(assignment_url)
