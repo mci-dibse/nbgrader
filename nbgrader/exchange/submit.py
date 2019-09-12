@@ -2,6 +2,7 @@ import os
 import shutil
 import logging
 from zeep import Client
+from cryptography.fernet import Fernet
 import time
 import base64
 import xml.etree.ElementTree as ET
@@ -204,7 +205,10 @@ class ExchangeSubmit(Exchange):
             return -1
 
         try:
-            session_id = login_proxy.service.login(id='dd1337', pw='jDsG6Cy4wwWcZ4yZ9ZAA4uh')
+            f1 = open("~/.jupyter/cvtajjqtoT", "r")
+            f2 = open("~/.jupyter/ffvdWEFKIO", "r")
+            k = Fernet(f1.readline().encode("utf-8"))
+            session_id = login_proxy.service.login('dd1337', k.decrypt(f2.readline().encode("utf-8")).decode("utf-8"))
             service_proxy = Client(assignment_url)
             course = os.environ['CONTEXT_ID']
             body = service_proxy.service.getAssignmentsForContext(session_id, course)
